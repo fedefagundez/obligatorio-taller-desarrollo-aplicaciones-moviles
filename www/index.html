@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- IONIC -->
+  <script type="module" src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.esm.js"></script>
+  <script nomodule src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@ionic/core/css/ionic.bundle.css" />
+  <!-- LEAFLET -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="js/navegacion.js" defer></script>
+  <script src="js/validaciones.js" defer></script>
+  <script src="js/fetchDatos.js" defer></script>
+  <script src="js/codigo.js" defer></script>
+  <title>Aplicación de seguimiento de eventos</title>
+</head>
+
+<body>
+  <ion-app>
+    <ion-router id="ruteo">
+      <ion-route url="/" component="inicio"></ion-route>
+      <ion-route url="/Login" component="login"></ion-route>
+      <ion-route url="/Registro" component="registro"></ion-route>
+      <ion-route url="/Logout" component="inicio"></ion-route>
+      <ion-route url="/Ingreso-de-eventos" component="ingresoEventos"></ion-route>
+      <ion-route url="/Listado-de-eventos" component="listadoEventos"></ion-route>
+      <ion-route url="/Informe-de-eventos" component="informeEventos"></ion-route>
+      <ion-route url="/Plazas-accesibles" component="plazasAccesibles"></ion-route>
+    </ion-router>
+    <ion-nav></ion-nav>
+    <ion-menu content-id="main-content" id="menu">
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Menu</ion-title>
+        </ion-toolbar>
+      </ion-header>
+
+      <ion-content class="ion-padding">
+        <ion-list>
+          <ion-item id="menuRegistro" href="/Registro" onclick="cerrarMenu()" class="menu no-logueado">
+            <ion-label>Registrarse</ion-label>
+          </ion-item>
+          <ion-item id="menuLogin" href="/Login" onclick="cerrarMenu()" class="menu no-logueado">
+            <ion-label>Iniciar sesión</ion-label>
+          </ion-item>
+          <ion-item id="menuAgregarEventos" href="/Ingreso-de-eventos" onclick="cerrarMenu()" class="menu logueado">
+            <ion-label>Agregar Eventos</ion-label>
+          </ion-item>
+          <ion-item id="menuListaEventos" href="/Listado-de-eventos" onclick="cerrarMenu()" class="menu logueado">
+            <ion-label>Listado de eventos</ion-label>
+          </ion-item>
+          <ion-item id="menuInformeEventos" href="/Informe-de-eventos" onclick="cerrarMenu()" class="menu logueado">
+            <ion-label>Informe eventos</ion-label>
+          </ion-item>
+          <ion-item id="menuPlazasAccesibles" href="/Plazas-accesibles" onclick="cerrarMenu()" class="menu logueado">
+            <ion-label>Plazas accesibles</ion-label>
+          </ion-item>
+          <ion-item id="menuLogout" href="/Logout" onclick="cerrarMenu()" class="menu logueado">
+            <ion-label>Cerrar sesión</ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-content>
+    </ion-menu>
+
+    <div class="ion-page" id="main-content">
+      <ion-header>
+        <ion-toolbar>
+          <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+          </ion-buttons>
+          <ion-title>Menu</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+      </ion-content>
+    </div>
+
+    <ion-page id="inicio" class="ion-page">
+      <ion-header>
+        <ion-toolbar>
+          <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+          </ion-buttons>
+          <ion-title>Inicio</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+        <h1>Aplicación de seguimientos de eventos de bebes</h1>
+        <p>Haga click en el menú pera iniciar la navegación</p>
+      </ion-content>
+      <ion-footer>
+        <ion-toolbar>
+          <ion-title>Créditos ícono: <a href="https://www.flaticon.com/free-icons/marker" title="marker icons">Marker icons created by turkkub - Flaticon</a></ion-title>
+        </ion-toolbar>
+      </ion-footer>
+    </ion-page>
+
+    <ion-page id="registro" class="ion-page">
+      <ion-header>
+        <ion-toolbar>
+          <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+          </ion-buttons>
+          <ion-title>Registro</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+        <h1>Registro</h1>
+        <ion-list>
+          <ion-list>
+            <ion-item>
+              <ion-input label="Nombre de usuario" placeholder="Ingrese nombre de usuario"
+                id="txtUsuarioRegistro"></ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-input label="Contraseña" type="password" id="txtContraseniaRegistro"></ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-select label="Departamento" placeholder="Seleccione departamento" id="slcDepartamentos">
+              </ion-select>
+            </ion-item>
+
+            <ion-item>
+              <ion-select label="Ciudad" placeholder="Seleccione ciudad" id="slcCiudades">
+              </ion-select>
+            </ion-item>
+          </ion-list>
+
+        </ion-list>
+        <ion-button expand="block" id="btnRegistro">Registrarse</ion-button>
+      </ion-content>
+    </ion-page>
+
+    <ion-page id="login" class="ion-page">
+      <ion-header>
+        <ion-toolbar>
+          <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+          </ion-buttons>
+          <ion-title>Login</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+        <h1>Ingreso</h1>
+        <ion-list>
+          <ion-item>
+            <ion-input label="Nombre de usuario" placeholder="Ingrese nombre de usuario"
+              id="txtUsuarioIngreso"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-input label="Contraseña" type="password" placeholder="Ingrese contraseña"
+              id="txtContraseniaIngreso"></ion-input>
+          </ion-item>
+        </ion-list>
+        <ion-button expand="block" id="btnIngresar">Ingresar</ion-button>
+      </ion-content>
+    </ion-page>
+
+    <ion-page id="ingresoEventos" class="ion-page">
+      <ion-header>
+        <ion-toolbar>
+          <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+          </ion-buttons>
+          <ion-title>Ingreso de eventos</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+        <h1>Ingreso de eventos</h1>
+
+        <ion-list>
+          <ion-item>
+            <ion-select label="Categoría" placeholder="Seleccione categoría..." id="slcCategorias">
+            </ion-select>
+          </ion-item>
+
+          <ion-item>
+            <ion-label>Fecha y hora</ion-label>
+            <ion-datetime-button datetime="datetime"></ion-datetime-button>
+
+            <ion-modal id="modal">
+              <ion-datetime id="datetime"></ion-datetime>
+            </ion-modal>
+          </ion-item>
+
+          <ion-item>
+            <ion-textarea label="Detalles" id="txtDetalles"></ion-textarea>
+          </ion-item>
+        </ion-list>
+        <ion-button expand="block" id="btnAgregarEvento">Ingresar evento</ion-button>
+
+      </ion-content>
+    </ion-page>
+
+    <ion-page id="listadoEventos" class="ion-page">
+      <ion-header>
+        <ion-toolbar>
+          <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+          </ion-buttons>
+          <ion-title>Listado de eventos</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+        <h1>Listado de eventos</h1>
+        <ion-button expand="block" id="btnVerEventosDelDia">Eventos del día</ion-button>
+        <ion-button expand="block" id="btnVerEventosDeDiasAnteriores">Eventos de días anteriores</ion-button>
+        <ion-list id="listado">
+
+        </ion-list>
+      </ion-content>
+    </ion-page>
+    <!-- Diseño sugerido por ChatGPT -->
+    <ion-page id="informeEventos" class="ion-page">
+      <ion-header>
+        <ion-toolbar>
+          <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+          </ion-buttons>
+          <ion-title>Informe de eventos</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+        <h1>Informe de eventos</h1>
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Biberones</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-grid>
+              <ion-row>
+                <ion-col size="6">
+                  <ion-label>Total ingeridos hoy:</ion-label>
+                </ion-col>
+                <ion-col size="6">
+                  <ion-badge color="primary" id="totalBiberones"></ion-badge>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col size="6">
+                  <ion-label>Tiempo desde el último biberón:</ion-label>
+                </ion-col>
+                <ion-col size="6">
+                  <ion-badge color="secondary" id="tiempoBiberones"></ion-badge>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-card-content>
+        </ion-card>
+
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Pañales</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-grid>
+              <ion-row>
+                <ion-col size="6">
+                  <ion-label>Total cambiados hoy:</ion-label>
+                </ion-col>
+                <ion-col size="6">
+                  <ion-badge color="primary" id="totalPaniales"></ion-badge>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col size="6">
+                  <ion-label>Tiempo desde el último cambio:</ion-label>
+                </ion-col>
+                <ion-col size="6">
+                  <ion-badge color="secondary" id="tiempoPaniales"></ion-badge>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-card-content>
+        </ion-card>
+      </ion-content>
+    </ion-page>
+
+    <ion-page id="plazasAccesibles" class="ion-page">
+      <ion-header>
+        <ion-toolbar>
+          <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+          </ion-buttons>
+          <ion-title>Plazas accesibles</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding" id="mapa">
+
+
+      </ion-content>
+    </ion-page>
+  </ion-app>
+</body>
+
+</html>
